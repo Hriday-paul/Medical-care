@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ant-space-item{
+    width: 100%;
+}
+.ant-drawer-close, .ant-drawer-title{
+    color: white !important;
+}
