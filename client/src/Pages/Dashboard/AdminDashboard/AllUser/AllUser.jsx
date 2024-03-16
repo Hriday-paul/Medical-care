@@ -5,6 +5,7 @@ import { Button, Tooltip } from "antd";
 import { CiEdit } from "react-icons/ci";
 import toast, { Toaster } from "react-hot-toast";
 import Error from "../../../../Components/Shared/Ui/Error";
+import Loading from "../../../../Components/Shared/Ui/Loading";
 
 const initialState = {
     loading: true,
@@ -71,7 +72,7 @@ const AllUser = () => {
             </div>
 
             {
-                fetchingState.loading ? 'loading' : fetchingState.error ? <Error/> :
+                fetchingState.loading ? <Loading/> : fetchingState.error ? <Error/> :
                     <div className="overflow-x-auto bg-[#262522]">
                         <table className="table">
                             {/* head */}
@@ -94,7 +95,7 @@ const AllUser = () => {
                                             <td>
                                                 <div className="flex items-center gap-3">
                                                     <div className="avatar">
-                                                        <div className="mask mask-squircle w-12 h-12">
+                                                        <div className="rounded-full w-12 h-12">
                                                             <img src={user?.photo} alt="profile image" />
                                                         </div>
                                                     </div>

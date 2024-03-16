@@ -3,16 +3,14 @@ import logo from '../../../assets/logo.png'
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { Badge } from "antd";
 import { useContext, useState } from "react";
-import { RiArrowDropDownLine } from "react-icons/ri";
-import { CiUser } from "react-icons/ci";
+import { RiArrowDropDownLine, RiMenu3Fill } from "react-icons/ri";
+import { CiUser, CiViewList } from "react-icons/ci";
 import { HiLogout } from "react-icons/hi";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { RiMenu3Fill } from "react-icons/ri";
+import { LuLayoutDashboard, LuUsers2 } from "react-icons/lu";
 import { GiTireIronCross } from "react-icons/gi";
 import { authContext } from "../../../ContextHandler/Authonicate/Authonicate";
-import { LuUsers2 } from "react-icons/lu";
-import { CiViewList } from "react-icons/ci";
 import { MdAddTask } from "react-icons/md";
+import { FaListCheck } from "react-icons/fa6";
 
 const AdminDashboard = () => {
     const { userInfo, logOutUser } = useContext(authContext);
@@ -110,6 +108,10 @@ const AdminDashboard = () => {
                             <CiViewList className="text-white text-2xl mr-2"></CiViewList>
                             <h4 className="text-lg text-white font-serif font-medium">All Test</h4>
                         </NavLink>
+                        <NavLink to="/dashboard/reservation" className={({ isActive }) => isActive ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
+                            <FaListCheck className="text-white text-xl mr-2"></FaListCheck>
+                            <h4 className="text-lg text-white font-serif font-medium">Reservation</h4>
+                        </NavLink>
                     </div>
                 </div>
 
@@ -141,6 +143,10 @@ const AdminDashboard = () => {
                         <NavLink to="/dashboard/allTest" onClick={()=>setSlide(false)} className={({ isActive }) => isActive ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
                             <CiViewList className="text-white text-2xl mr-2"></CiViewList>
                             <h4 className="text-lg text-white font-serif font-medium">All Test</h4>
+                        </NavLink>
+                        <NavLink to="/dashboard/reservation" onClick={()=>setSlide(false)} className={({ isActive }) => isActive ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
+                            <FaListCheck className="text-white text-xl mr-2"></FaListCheck>
+                            <h4 className="text-lg text-white font-serif font-medium">Reservation</h4>
                         </NavLink>
                     </div>
                 </div>

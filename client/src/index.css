@@ -8,3 +8,19 @@
 .ant-drawer-close, .ant-drawer-title{
     color: white !important;
 }
+
+.ant-modal-content, .ant-modal-title{
+    background-color: #211D22 !important;
+    color: white !important;
+}
+.ant-modal-close{
+    color: rgb(179, 179, 179) !important;
+}
+.button, [type='button']{
+    background-color: #1C1B19;
+    border: 1 solid white;
+    color: white;
+}
+.button, [type='button']:hover{
+    background-color: #1C1B19;
+}

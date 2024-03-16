@@ -1,11 +1,12 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { CiViewList } from "react-icons/ci";
 import UseAxiosPublic from "../../../../Hooks/UseAxiosPublic";
-import { Toaster } from "react-hot-toast";
-import { Button, Tooltip } from "antd";
+import toast, { Toaster } from "react-hot-toast";
+import { Button, Modal, Tooltip } from "antd";
 import Error from "../../../../Components/Shared/Ui/Error";
 import { MdOutlineDelete } from "react-icons/md";
 import TestUpdateDrawer from "../../../../Components/Shared/Ui/TestUpdateDrawer";
+import Loading from "../../../../Components/Shared/Ui/Loading";
 
 const initialState = {
     loading: true,
@@ -47,12 +48,32 @@ const AllTest = () => {
     }
 
     const delateTest = (id) => {
-        console.log(id);
+        const loadingToastId = toast.loading('Test deletion pending...');
+        axiosPublic.delete(`deleteTest/${id}`)
+        .then(({data})=>{
+            toast.success('Delete complete', {id : loadingToastId});
+            fetchData();
+            console.log(data);
+        })
+        .catch(()=>{
+            toast.error('Something wents wrong, try again !', {id : loadingToastId})
+        })
     }
 
     useEffect(() => {
         fetchData();
     }, []);
+
+    const [isModal, setIsModal] = useState({
+        isOpen: false,
+        content: {}
+    });
+    const cencelModal = () => {
+        setIsModal({
+            isOpen: false,
+            content: {}
+        })
+    }
 
     return (
         <div>
@@ -63,7 +84,7 @@ const AllTest = () => {
                 <h4 className="text-xl font-medium font-serif">All Test</h4>
             </div>
             {
-                fetchingTests.loading ? 'loading' : fetchingTests.error ? <Error /> :
+                fetchingTests.loading ? <Loading /> : fetchingTests.error ? <Error /> :
                     <div className="overflow-x-auto bg-[#262522]">
                         <table className="table">
                             {/* head */}
@@ -92,20 +113,34 @@ const AllTest = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="font-serif">
                                                 {test?.name}
                                             </td>
                                             <td>
-                                                {new Date(test?.testDate).getDate()+'-'+(new Date(test?.testDate).getMonth()+1)+'-'+new Date(test?.testDate).getFullYear()}
+                                                {new Date(test?.testDate).getDate() + '-' + (new Date(test?.testDate).getMonth() + 1) + '-' + new Date(test?.testDate).getFullYear()}
                                             </td>
                                             <td>
                                                 {test?.slot}
                                             </td>
                                             <td>
-                                                details
+                                                <p className="cursor-pointer font-serif hover:underline underline-offset-2" onClick={() => setIsModal({ isOpen: true, content: test?.details })}>Details</p>
+                                                {
+                                                    isModal.isOpen && <Modal
+                                                        title="Details"
+                                                        style={{ backgroundColor: 'black' }}
+                                                        open={isModal.isOpen}
+                                                        onOk={cencelModal}
+                                                        onCancel={cencelModal}
+                                                        okButtonProps={{ style: { display: 'none' } }}
+                                                        centered>
+
+                                                        <p className="font-sans">{isModal?.content}</p>
+
+                                                    </Modal>
+                                                }
                                             </td>
                                             <td>
-                                                <TestUpdateDrawer test={test}></TestUpdateDrawer>
+                                                <TestUpdateDrawer test={test} fetchData={fetchData}></TestUpdateDrawer>
                                             </td>
                                             <td>
                                                 <Tooltip title={`Delete test`}>
@@ -118,7 +153,7 @@ const AllTest = () => {
                                                     </Button>
                                                 </Tooltip>
                                             </td>
-                                            
+
                                         </tr>
                                     })
                                 }
@@ -128,6 +163,7 @@ const AllTest = () => {
                         </table>
                     </div>
             }
+
             <Toaster></Toaster>
         </div>
     );

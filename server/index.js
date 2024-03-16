@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 })
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fzz1qah.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -80,6 +80,33 @@ async function run() {
          app.get('/allTest', async (req, res) => {
             try {
                 const result = await testList.find().toArray();
+                res.send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        // update test
+        app.put('/updateTest', async (req, res) => {
+            try {
+                const updatedData = req.body;
+                const query = {_id : new ObjectId(updatedData.id)}
+                delete updatedData.id;
+                const finalData = {
+                    $set : updatedData
+                }
+                const result = await testList.updateOne(query, finalData)
+                res.send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        //delete a test
+        app.delete('/deleteTest/:id', async (req, res) => {
+            try {
+                const query = {_id : new ObjectId(req.params.id)};
+                const result = await testList.deleteOne(query)
                 res.send(result);
             } catch (err) {
                 res.status(400).send({ message: err.message });

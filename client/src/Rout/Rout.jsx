@@ -10,6 +10,7 @@ import Dashboard from "../Pages/Dashboard/Dashboard";
 import AllUser from "../Pages/Dashboard/AdminDashboard/AllUser/AllUser";
 import AddTest from "../Pages/Dashboard/AdminDashboard/AddTest/AddTest";
 import AllTest from "../Pages/Dashboard/AdminDashboard/AllTest/AllTest";
+import Reservation from "../Pages/Dashboard/AdminDashboard/Reservation/Reservation";
 
 const rout = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const rout = createBrowserRouter([
       {
         path: "/dashboard/allTest",
         element: <AllTest />,
+      },
+      {
+        path: "/dashboard/reservation",
+        element: <Reservation />,
       }
     ],
   },
