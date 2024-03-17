@@ -17,11 +17,15 @@ import TestResult from "../Pages/Dashboard/UserDashboard/TestResult/TestResult";
 import Profile from "../Pages/Dashboard/UserDashboard/Profile/Profile";
 import Details from "../Pages/Details/Details";
 import Appoinments from "../Pages/Dashboard/UserDashboard/Appoinments/Appoinments";
+import Gallery from "../Pages/Gallery/Gallery";
+import Error from "../Components/Shared/Ui/Error";
+import PrivateAdmin from "../Components/Shared/PrivateAdmin/PrivateAdmin";
 
 const rout = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement : <Error/>,
     children: [
       {
         path: "/",
@@ -34,6 +38,10 @@ const rout = createBrowserRouter([
       {
         path: "/details/:id",
         element: <Details />,
+      },
+      {
+        path: "/gallery",
+        element: <Gallery />,
       }
     ],
   },
@@ -47,7 +55,7 @@ const rout = createBrowserRouter([
       },
       {
         path: "/dashboard/users",
-        element: <AllUser />,
+        element: <AllUser/>,
       },
       {
         path: "/dashboard/addTest",

@@ -246,7 +246,7 @@ async function run() {
                 else if (req.query.type == 'complete') {
                     result = await reservationList.aggregate(
                         [
-                            { $match: { email: req.params.email , report: 'complete'} },
+                            { $match: { email: req.params.email, report: 'complete' } },
                             {
                                 $lookup: {
                                     from: 'tests',
@@ -260,7 +260,7 @@ async function run() {
                 else if (req.query.type == 'cencel') {
                     result = await reservationList.aggregate(
                         [
-                            { $match: { email: req.params.email , report: 'cencel'} },
+                            { $match: { email: req.params.email, report: 'cencel' } },
                             {
                                 $lookup: {
                                     from: 'tests',
@@ -290,7 +290,37 @@ async function run() {
             }
         })
 
-        
+        // get most frequent collection
+        app.get('/mostFrequent', async (req, res) => {
+            try {
+                const result = await reservationList.aggregate([
+                    {
+                        $group: {
+                            _id: { testId: "$testId" },
+                            count: { $sum: 1 }
+                        }
+                    },
+                    {
+                        $sort: { count: -1 }
+                    },
+                    {
+                        $limit: 4
+                    }
+                ]).toArray();
+
+                const idList = result.map((list) => {
+                    return new ObjectId(list._id.testId)
+                })
+
+                const resultCollection = await testList.find({ "_id": { $in: idList } }).toArray();
+
+                res.send(resultCollection)
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });

@@ -1,9 +1,10 @@
+import Error from "../../../../Components/Shared/Ui/Error";
 
 
 const Profile = () => {
     return (
         <div>
-            profile
+            <Error/>
         </div>
     );
 };

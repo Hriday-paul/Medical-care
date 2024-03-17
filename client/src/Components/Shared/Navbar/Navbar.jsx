@@ -90,7 +90,7 @@ const Navbar = () => {
                             <span className="absolute top-0 right-0 w-20 h-full -mr-3">
                                 <svg viewBox="0 0 487 487" className="object-cover w-full h-full" xmlns="http://www.w3.org/2000/svg"><path d="M487 486.7c-66.1-3.6-132.3-7.3-186.3-37s-95.9-85.3-126.2-137.2c-30.4-51.8-49.3-99.9-76.5-151.4C70.9 109.6 35.6 54.8.3 0H487v486.7z" fill="#FFF" fillRule="nonzero" fillOpacity=".1"></path></svg>
                             </span>
-                            <span className="relative text-sm md:text-base">Make Appoinment</span>
+                            <span className="relative text-sm md:text-base">My Appoinments</span>
                         </Link>
                         <RiMenu3Fill className="text-white text-2xl md:text-3xl lg:hidden"></RiMenu3Fill>
                     </div>
