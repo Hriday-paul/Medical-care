@@ -35,7 +35,7 @@ const TestUpdateDrawer = ({ test, fetchData }) => {
                 .then((data) => {
                     const photo = data.secure_url;
                     handleSendServer(
-                        {id : test._id, ...updateddata, photo, testDate: new Date(updateddata.testDate).getTime() }
+                        {id : test._id, ...updateddata, price : parseInt(updateddata?.price), slot : parseInt(updateddata?.slot), photo, testDate: new Date(updateddata.testDate).getTime() }
                         , loadingToastId)
                 })
                 .catch(() => {
@@ -45,7 +45,7 @@ const TestUpdateDrawer = ({ test, fetchData }) => {
         else {
             delete updateddata.photo;
             handleSendServer(
-                { id : test._id, ...updateddata, testDate: new Date(updateddata.testDate).getTime() }
+                { id : test._id, ...updateddata, price : parseInt(updateddata?.price), slot : parseInt(updateddata?.slot), testDate: new Date(updateddata.testDate).getTime() }
                 , loadingToastId)
         }
     };

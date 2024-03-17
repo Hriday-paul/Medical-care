@@ -18,11 +18,10 @@ const AddTest = () => {
         .then((response) => response.json())
             .then((data) => {
                 const photo = data.secure_url;
-                axiosPublic.post('/addTest', {...testData, photo, testDate : new Date(testData.testDate).getTime()})
-                .then(({data})=>{
+                axiosPublic.post('/addTest', {...testData, price : parseInt(testData?.price), slot : parseInt(testData?.slot), photo, testDate : new Date(testData.testDate).getTime()})
+                .then(()=>{
                     toast.success('Test added successfully', {id : loadingToastId});
                     reset();
-                    console.log(data);
                 })
                 .catch(()=>{
                     toast.error('Something wents wrong, try again !', {id : loadingToastId})

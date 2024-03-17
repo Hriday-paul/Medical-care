@@ -1,9 +1,9 @@
 import { useContext, useEffect, useReducer } from "react";
-import AdminDashboard from "./AdminDashboard/AdminDashboard";
-import UserDashboard from "./UserDashboard/UserDashboard";
-import { authContext } from "../../ContextHandler/Authonicate/Authonicate";
-import CheckAdmin from "../../Hooks/CheckAdmin";
-import RootLoading from "../../Components/Shared/Ui/RootLoading";
+import CheckAdmin from "../../../Hooks/CheckAdmin";
+import { authContext } from "../../../ContextHandler/Authonicate/Authonicate";
+import UserHome from "../UserDashboard/UserHome/UserHome";
+import AdminHome from '../AdminDashboard/AdminHome/AdminHome'
+import Loading from "../../../Components/Shared/Ui/Loading";
 
 const initialState = {
     loading: true,
@@ -26,17 +26,16 @@ const reducer = (currentState, action) => {
     }
 }
 
-
-const Dashboard = () => {
+const DashboardHome = () => {
     const { userInfo } = useContext(authContext);
     const [adminCheckState, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
         CheckAdmin(userInfo?.email)
             .then(({ data }) => {
-                if (data.admin) {
+                if(data.admin){
                     dispatch('admin')
                 }
-                else {
+                else{
                     dispatch('user')
                 }
             })
@@ -45,10 +44,10 @@ const Dashboard = () => {
     return (
         <div>
             {
-                adminCheckState.loading ? <RootLoading /> : adminCheckState.isAdmin ? <AdminDashboard /> : <UserDashboard />
+                adminCheckState.loading ? <Loading /> : adminCheckState.isAdmin ? <AdminHome /> : <UserHome/>
             }
         </div>
     );
 };
 
-export default Dashboard;
+export default DashboardHome;

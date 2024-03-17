@@ -11,6 +11,12 @@ import AllUser from "../Pages/Dashboard/AdminDashboard/AllUser/AllUser";
 import AddTest from "../Pages/Dashboard/AdminDashboard/AddTest/AddTest";
 import AllTest from "../Pages/Dashboard/AdminDashboard/AllTest/AllTest";
 import Reservation from "../Pages/Dashboard/AdminDashboard/Reservation/Reservation";
+import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
+import Private from "../Components/Shared/Private/Private";
+import TestResult from "../Pages/Dashboard/UserDashboard/TestResult/TestResult";
+import Profile from "../Pages/Dashboard/UserDashboard/Profile/Profile";
+import Details from "../Pages/Details/Details";
+import Appoinments from "../Pages/Dashboard/UserDashboard/Appoinments/Appoinments";
 
 const rout = createBrowserRouter([
   {
@@ -24,13 +30,21 @@ const rout = createBrowserRouter([
       {
         path: "/allTest",
         element: <Alltests />,
+      },
+      {
+        path: "/details/:id",
+        element: <Details />,
       }
     ],
   },
   {
     path: "/dashboard",
-    element: <Dashboard /> ,
+    element: <Private><Dashboard /></Private> ,
     children: [
+      {
+        path: "/dashboard",
+        element: <DashboardHome />,
+      },
       {
         path: "/dashboard/users",
         element: <AllUser />,
@@ -46,6 +60,18 @@ const rout = createBrowserRouter([
       {
         path: "/dashboard/reservation",
         element: <Reservation />,
+      },
+      {
+        path: "/dashboard/result",
+        element: <TestResult />,
+      },
+      {
+        path: "/dashboard/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/dashboard/myAppoinments",
+        element: <Appoinments />,
       }
     ],
   },

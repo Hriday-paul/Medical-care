@@ -8,9 +8,9 @@
 .ant-drawer-close, .ant-drawer-title{
     color: white !important;
 }
-
+/* #211D22 */
 .ant-modal-content, .ant-modal-title{
-    background-color: #211D22 !important;
+    background-color: #111827 !important; 
     color: white !important;
 }
 .ant-modal-close{

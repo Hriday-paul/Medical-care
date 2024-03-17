@@ -32,17 +32,32 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
-
         const dataBase = client.db("medicare");
         const userList = dataBase.collection("users");
         const testList = dataBase.collection("tests");
+        const reservationList = dataBase.collection("reservations");
 
+        //get admin
+        app.get("/isAdmin/:email", async (req, res) => {
+            try {
+                const user = await userList.findOne({ email: req.params.email });
+                let admin = false;
+                if (user) {
+                    admin = user?.role === 'admin';
+                }
+                res.send({ admin });
+            } catch (err) {
+                res.status(402).send({ err })
+            }
+        })
+
+        // update & creat user
         app.put('/user', async (req, res) => {
             try {
                 const filter = { email: req.body.email }
                 const options = { upsert: true };
                 const updateDoc = {
-                    $set: req.body
+                    $set: { ...req.body, role: 'user' }
                 }
                 const result = await userList.updateOne(filter, updateDoc, options);
                 res.send(result);
@@ -54,7 +69,7 @@ async function run() {
         // get all users
         app.get('/users', async (req, res) => {
             try {
-                const result = await userList.find({email: { $ne: 'admin@gmail.com' }},
+                const result = await userList.find({ email: { $ne: 'admin@gmail.com' } },
                     {
                         password: 0,
                     }
@@ -77,11 +92,20 @@ async function run() {
         })
 
         // get all test
-         app.get('/allTest', async (req, res) => {
+        app.get('/allTest', async (req, res) => {
             try {
-                const result = await testList.find().toArray();
+                let result = [];
+                if (req.query.type == 'valid') {
+                    result = await testList.find({ testDate: { $gte: Date.now() } }).toArray();
+                }
+                else if (req.query.type == 'invalid') {
+                    result = await testList.find({ testDate: { $lte: Date.now() } }).toArray();
+                } else {
+                    result = await testList.find().toArray();
+                }
                 res.send(result);
             } catch (err) {
+                console.log(err);
                 res.status(400).send({ message: err.message });
             }
         })
@@ -90,10 +114,10 @@ async function run() {
         app.put('/updateTest', async (req, res) => {
             try {
                 const updatedData = req.body;
-                const query = {_id : new ObjectId(updatedData.id)}
+                const query = { _id: new ObjectId(updatedData.id) }
                 delete updatedData.id;
                 const finalData = {
-                    $set : updatedData
+                    $set: updatedData
                 }
                 const result = await testList.updateOne(query, finalData)
                 res.send(result);
@@ -102,10 +126,21 @@ async function run() {
             }
         })
 
+        // get specifiq test details
+        app.get('/test/:id', async (req, res) => {
+            try {
+                const params = { _id: new ObjectId(req.params.id) };
+                const result = await testList.findOne(params);
+                res.status(200).send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
         //delete a test
         app.delete('/deleteTest/:id', async (req, res) => {
             try {
-                const query = {_id : new ObjectId(req.params.id)};
+                const query = { _id: new ObjectId(req.params.id) };
                 const result = await testList.deleteOne(query)
                 res.send(result);
             } catch (err) {
@@ -113,7 +148,149 @@ async function run() {
             }
         })
 
+        // add resurvation
+        app.put('/addReservation', async (req, res) => {
+            try {
+                const query = { testId: new ObjectId(req.body.testId), name: req.body.name, email: req.body.email };
+                const options = { upsert: true };
+                const finalData = {
+                    $set: { ...req.body, testId: new ObjectId(req.body.testId), report: 'pending' }
+                };
+                const result = await reservationList.updateOne(query, finalData, options);
+                if (result.upsertedCount >= 1) {
+                    await testList.updateOne(
+                        { _id: new ObjectId(req.body.testId) },
+                        { $inc: { slot: -1 } }
+                    )
+                }
+                res.send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
 
+        //get all Reservation
+        app.get('/reservation', async (req, res) => {
+            try {
+                let result = []
+                if (req.query.type == 'all') {
+                    result = await reservationList.find().toArray();
+                }
+                else if (req.query.type == 'pending') {
+                    result = await reservationList.find({ report: 'pending' }).toArray();
+                }
+                else if (req.query.type == 'complete') {
+                    result = await reservationList.find({ report: 'complete' }).toArray();
+                }
+                else if (req.query.type == 'cencel') {
+                    result = await reservationList.find({ report: 'cencel' }).toArray();
+                }
+                else {
+                    result = [];
+                }
+                res.status(200).send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        //update specifiq reservation
+        app.put('/updateReservation', async (req, res) => {
+            try {
+                const updatedData = req.body;
+                const query = { _id: new ObjectId(updatedData.patientId) }
+                delete updatedData.patientId;
+                const finalData = {
+                    $set: updatedData
+                }
+                const result = await reservationList.updateOne(query, finalData)
+                res.send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        // get user wise appoinments
+        app.get('/appoinments/:email', async (req, res) => {
+            try {
+                let result = []
+                if (req.query.type == 'all') {
+
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { email: req.params.email } },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
+                }
+                else if (req.query.type == 'pending') {
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { email: req.params.email, report: 'pending' } },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
+                }
+                else if (req.query.type == 'complete') {
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { email: req.params.email , report: 'complete'} },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
+                }
+                else if (req.query.type == 'cencel') {
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { email: req.params.email , report: 'cencel'} },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
+                }
+                else {
+                    result = [];
+                }
+                res.status(200).send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        // delete a appoinment
+        app.delete('/delAppoinment/:id', async (req, res) => {
+            try {
+                const result = await reservationList.deleteOne({ _id: new ObjectId(req.params.id) });
+                res.status(200).send(result);
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });

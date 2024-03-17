@@ -1,17 +1,19 @@
-import { CiViewList } from "react-icons/ci";
-import Error from "../../../../Components/Shared/Ui/Error";
-import { useCallback, useEffect, useReducer } from "react";
-import UseAxiosPublic from "../../../../Hooks/UseAxiosPublic";
-import Loading from "../../../../Components/Shared/Ui/Loading";
-import { Spin } from "antd";
-// import { MdOutlineDelete } from "react-icons/md";
+import { useCallback, useContext, useEffect, useReducer } from "react"
+import UseAxiosPublic from "../../../../Hooks/UseAxiosPublic"
+import { authContext } from "../../../../ContextHandler/Authonicate/Authonicate"
+import { Button, Spin, Tooltip } from "antd"
+import { TiTick } from "react-icons/ti"
+import { FcCancel } from "react-icons/fc"
 import { LoadingOutlined } from '@ant-design/icons';
-import { TiTick } from "react-icons/ti";
-import { FcCancel } from "react-icons/fc";
-import ChangeStatus from "../../../../Components/Shared/Ui/ChangeStatus";
+import { CiViewList } from "react-icons/ci"
+import Loading from "../../../../Components/Shared/Ui/Loading"
+import Error from "../../../../Components/Shared/Ui/Error"
+import { MdOutlineDelete } from "react-icons/md"
+import { Link } from "react-router-dom"
+import toast, { Toaster } from "react-hot-toast"
 
 const initialState = {
-    reservations: [],
+    appoinments: [],
     loading: true,
     error: ''
 }
@@ -19,25 +21,28 @@ const reducer = (currentState, action) => {
     switch (action.type) {
         case 'success':
             return {
-                reservations: action.data,
+                appoinments: action.data,
                 loading: false,
                 error: ''
             }
         case 'error':
             return {
-                reservations: [],
+                appoinments: [],
                 loading: false,
                 error: 'Error found'
             }
         default: return currentState
     }
 }
-const Reservation = () => {
+
+
+const Appoinments = () => {
     const axiosPublic = UseAxiosPublic();
+    const { userInfo } = useContext(authContext);
     const [fetchingState, dispatch] = useReducer(reducer, initialState);
 
     const fetchData = useCallback((type) => {
-        axiosPublic.get(`/reservation?type=${type}`)
+        axiosPublic.get(`/appoinments/${userInfo.email}?type=${type}`)
             .then(({ data }) => {
                 dispatch({ type: 'success', data })
             })
@@ -54,13 +59,25 @@ const Reservation = () => {
         fetchData(e.target.value);
     }
 
+    const deleteAppoinment = (id)=>{
+        const loadingToastId = toast.loading('Appoinment delete pending...')
+        axiosPublic.delete(`/delAppoinment/${id}`)
+        .then(()=>{
+            toast.success('Appoinment Delete Successfully', {id : loadingToastId});
+            fetchData('all')
+        })
+        .catch(()=>{
+            toast.error('Something wents wrong, try again !', {id : loadingToastId})
+        })
+    }
+
     return (
         <div>
             <div className="bg-[#262522] rounded-md p-2 mb-5 flex gap-x-3 items-center">
                 <span className="p-2 bg-gradient-to-r from-[#14022b] to-[#1c043d] inline-block rounded-sm">
                     <CiViewList className="text-xl text-white "></CiViewList>
                 </span>
-                <h4 className="text-xl font-medium font-serif">Reservation</h4>
+                <h4 className="text-xl font-medium font-serif">My Appoinments</h4>
             </div>
 
             {
@@ -80,59 +97,73 @@ const Reservation = () => {
                                 <thead>
                                     <tr className="border-[#494846]">
                                         <th>Name</th>
-                                        <th>Age</th>
                                         <th>Phone</th>
+                                        <th>Test Name</th>
+                                        <th>Price</th>
+                                        <th>Date</th>
+                                        <th>Age</th>
                                         <th>Blood</th>
-                                        <th>Status</th>
-                                        <th>Change Status</th>
-                                        {/* <th>Delete</th> */}
-
+                                        <th>Details</th>
+                                        <th>Status</th> 
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     {
-                                        fetchingState.reservations?.map((reservation) => {
-                                            return <tr key={reservation?._id} className="border-[#494846]">
+                                        fetchingState.appoinments?.map((appoinment) => {
+                                            return <tr key={appoinment?._id} className="border-[#494846]">
 
                                                 <td>
-                                                    {reservation?.name}
+                                                    {appoinment?.name}
                                                 </td>
                                                 <td>
-                                                    {reservation?.age}
+                                                    {appoinment?.phone}
                                                 </td>
                                                 <td>
-                                                    {reservation?.phone}
+                                                    {appoinment?.testDetails[0]?.name}
                                                 </td>
                                                 <td>
-                                                    {reservation?.blood}
+                                                    {appoinment?.testDetails[0]?.price}
                                                 </td>
                                                 <td>
-                                                    {reservation.report === 'pending' && <div className="mx-auto">
+                                                    
+                                                    {new Date(appoinment?.testDetails[0]?.testDate).getDate() + '-' + (new Date(appoinment?.testDetails[0]?.testDate).getMonth() + 1) + '-' + new Date(appoinment?.testDetails[0]?.testDate).getFullYear()}
+                                                </td>
+                                                <td>
+                                                    {appoinment?.age}
+                                                </td>
+                                                
+                                                <td>
+                                                    {appoinment?.blood}
+                                                </td>
+                                                <td>
+                                                    <Link className="text-sky-600" to={`/details/${appoinment?.testId}`}>See test details</Link>
+                                                </td>
+                                                <td>
+                                                    {appoinment.report === 'pending' && <div className="mx-auto">
                                                         <Spin indicator={
                                                             <LoadingOutlined style={{ color: '#4096FF', fontSize: 14, }} spin />} />
                                                     </div>}
 
 
-                                                    {reservation.report === 'complete' && <TiTick className="text-green-500 text-lg" />}
+                                                    {appoinment.report === 'complete' && <TiTick className="text-green-500 text-lg" />}
 
-                                                    {reservation.report === 'cencel' && <FcCancel className="text-base " />}
+                                                    {appoinment.report === 'cencel' && <FcCancel className="text-base " />}
                                                 </td>
                                                 
+
                                                 <td>
-                                                    <ChangeStatus patientId={reservation?._id} status={reservation?.report} fetchData={fetchData}></ChangeStatus>
-                                                </td>
-                                                {/* <td>
                                                     <Tooltip title={`delete`}>
                                                         <Button
                                                             style={{ backgroundColor: '#515150', boxShadow: 0, color: 'white', border: 0 }}
                                                             type="primary"
                                                             icon={<MdOutlineDelete />}
-
+                                                            onClick={()=>deleteAppoinment(appoinment._id)}
                                                         >
                                                         </Button>
                                                     </Tooltip>
-                                                </td> */}
+                                                </td>
                                             </tr>
                                         })
                                     }
@@ -143,8 +174,9 @@ const Reservation = () => {
                         </div>
                     </div>
             }
+            <Toaster />
         </div>
     );
 };
 
-export default Reservation;
+export default Appoinments;
