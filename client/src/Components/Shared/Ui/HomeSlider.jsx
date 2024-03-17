@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 const HomeSlider = () => {
     const [currentSlider, setCurrentSlider] = useState(0);
     const carouselImages = [
-        'https://dogri.bluebellbd.net/wp-content/uploads/2023/11/service-03.jpg',
-        'https://dogri.bluebellbd.net/wp-content/uploads/2023/11/service-01.jpg',
-        'http://holamed.like-themes.com/wp-content/uploads/2018/11/SLIDE_02.jpg',
-        'https://dogri.bluebellbd.net/wp-content/uploads/2023/11/service-02.jpg'
+        'https://res.cloudinary.com/devlj6p7h/image/upload/v1710672716/test/s7tnb9bkmsdceksdxeif.jpg',
+        'https://res.cloudinary.com/devlj6p7h/image/upload/v1710673359/test/mrreejoriabfztexn7dc.jpg',
+        'https://res.cloudinary.com/devlj6p7h/image/upload/v1710490384/test/ksa6iikwjz3kgbx8isxe.jpg',
+        'https://res.cloudinary.com/devlj6p7h/image/upload/v1710672786/test/hma5h2yvvyixwkluvpeu.jpg'
     ];
 
     const prevSlider = () => setCurrentSlider((currentSlider) => currentSlider === 0 ? carouselImages.length - 1 : currentSlider - 1);

@@ -1,5 +1,10 @@
 import PageTopUi from '../../Components/Shared/PageTopUi/PageTopUi'
-const galleryList = ['https://mida.peerduck.com/wp-content/uploads/2023/04/k75g.png', 'https://mida.peerduck.com/wp-content/uploads/2023/04/k57gt.png', 'https://mida.peerduck.com/wp-content/uploads/2023/04/4tjg4.png', 'https://mida.peerduck.com/wp-content/uploads/2023/04/rwtbr.png', 'https://mida.peerduck.com/wp-content/uploads/2023/04/rehb34f.png', 'https://mida.peerduck.com/wp-content/uploads/2023/04/6uj4gt.png']
+const galleryList = ['https://res.cloudinary.com/devlj6p7h/image/upload/v1710704363/docs/shahojeylnqolgnpsw4t.png', 
+'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704367/docs/kudt8okdivus88if9kss.png', 
+'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704369/docs/q1yho6x6lnybelwxdd8j.png', 
+'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704366/docs/apjeqw0ycmwbdsufzogw.png', 
+'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704374/docs/wqgd8fwqeexyu0xeygv5.png', 
+'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704369/docs/x78gkk0c1j9uavzuuoth.png']
 const Gallery = () => {
     return (
         <div>

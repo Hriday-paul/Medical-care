@@ -1,21 +1,21 @@
 const outComes = [
     {
-        img : 'https://mida.peerduck.com/wp-content/uploads/2023/03/5yhg5.png',
+        img : 'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704090/docs/mmzd3kucllkjp1tc57of.png',
         name : 'Faster services',
         details : 'Our patients can expect to receive accurate results quickly, giving them peace of mind'
     },
     {
-        img : 'https://mida.peerduck.com/wp-content/uploads/2023/03/efvet.png',
+        img : 'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704175/docs/m3syhs6n9pxsjnswxuie.png',
         name : 'Higher accuracy rates',
         details : 'Our diagnostic center invests in the latest state-of-the-art diagnostic technology'
     },
     {
-        img : 'https://mida.peerduck.com/wp-content/uploads/2023/03/45yh5g.png',
+        img : 'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704221/docs/ecakek7ryofozkh2coq9.png',
         name : 'Range of services',
         details : 'Our medical diagnostic center offers a comprehensive range of diagnostic services'
     },
     {
-        img : 'https://mida.peerduck.com/wp-content/uploads/2023/03/43tg4bv.png',
+        img : 'https://res.cloudinary.com/devlj6p7h/image/upload/v1710704259/docs/atzz6pe1o0j3b4ddhku3.png',
         name : 'Personalized care',
         details : 'We believe in providing personalized care and support to every patient who walks through our doors'
     }

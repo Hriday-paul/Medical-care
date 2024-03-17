@@ -19,7 +19,6 @@ import Details from "../Pages/Details/Details";
 import Appoinments from "../Pages/Dashboard/UserDashboard/Appoinments/Appoinments";
 import Gallery from "../Pages/Gallery/Gallery";
 import Error from "../Components/Shared/Ui/Error";
-import PrivateAdmin from "../Components/Shared/PrivateAdmin/PrivateAdmin";
 
 const rout = createBrowserRouter([
   {
