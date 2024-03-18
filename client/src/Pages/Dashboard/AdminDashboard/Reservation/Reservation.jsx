@@ -3,12 +3,12 @@ import Error from "../../../../Components/Shared/Ui/Error";
 import { useCallback, useEffect, useReducer } from "react";
 import UseAxiosPublic from "../../../../Hooks/UseAxiosPublic";
 import Loading from "../../../../Components/Shared/Ui/Loading";
-import { Spin } from "antd";
-// import { MdOutlineDelete } from "react-icons/md";
 import { LoadingOutlined } from '@ant-design/icons';
 import { TiTick } from "react-icons/ti";
 import { FcCancel } from "react-icons/fc";
 import ChangeStatus from "../../../../Components/Shared/Ui/ChangeStatus";
+import NotFound from "../../../../Components/Shared/Ui/NotFound";
+import { Spin } from "antd";
 
 const initialState = {
     reservations: [],
@@ -64,6 +64,10 @@ const Reservation = () => {
             </div>
 
             {
+
+            }
+
+            {
                 fetchingState.loading ? <Loading /> : fetchingState.error ? <Error /> :
                     <div>
                         <div className="text-right my-3">
@@ -74,55 +78,70 @@ const Reservation = () => {
                                 <option value="cencel">Cencel</option>
                             </select>
                         </div>
-                        <div className="overflow-x-auto bg-[#262522]">
-                            <table className="table">
-                                {/* head */}
-                                <thead>
-                                    <tr className="border-[#494846]">
-                                        <th>Name</th>
-                                        <th>Age</th>
-                                        <th>Phone</th>
-                                        <th>Blood</th>
-                                        <th>Status</th>
-                                        <th>Change Status</th>
-                                        {/* <th>Delete</th> */}
+                        {fetchingState.reservations?.length <= 0 ? <NotFound /> :
+                            <div>
+                                <div className="overflow-x-auto bg-[#262522]">
+                                    <table className="table">
+                                        {/* head */}
+                                        <thead>
+                                            <tr className="border-[#494846]">
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Test Name</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Age</th>
+                                                <th>Blood</th>
+                                                <th>Status</th>
+                                                <th>Change Status</th>
+                                                {/* <th>Delete</th> */}
 
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    {
-                                        fetchingState.reservations?.map((reservation) => {
-                                            return <tr key={reservation?._id} className="border-[#494846]">
+                                            {
+                                                fetchingState.reservations?.map((reservation) => {
+                                                    return <tr key={reservation?._id} className="border-[#494846]">
 
-                                                <td>
-                                                    {reservation?.name}
-                                                </td>
-                                                <td>
-                                                    {reservation?.age}
-                                                </td>
-                                                <td>
-                                                    {reservation?.phone}
-                                                </td>
-                                                <td>
-                                                    {reservation?.blood}
-                                                </td>
-                                                <td>
-                                                    {reservation.report === 'pending' && <div className="mx-auto">
-                                                        <Spin indicator={
-                                                            <LoadingOutlined style={{ color: '#4096FF', fontSize: 14, }} spin />} />
-                                                    </div>}
+                                                        <td>
+                                                            {reservation?.name}
+                                                        </td>
+                                                        <td>
+                                                            {reservation?.phone}
+                                                        </td>
+                                                        <td>
+                                                            {reservation?.testDetails[0].name}
+                                                        </td>
+                                                        <td>
+                                                            {reservation?.testDetails[0]?.price}
+                                                        </td>
+                                                        <td>
+
+                                                            {new Date(reservation?.testDetails[0]?.testDate).getDate() + '-' + (new Date(reservation?.testDetails[0]?.testDate).getMonth() + 1) + '-' + new Date(reservation?.testDetails[0]?.testDate).getFullYear()}
+                                                        </td>
+                                                        <td>
+                                                            {reservation?.age}
+                                                        </td>
+                                                        <td>
+                                                            {reservation?.blood}
+                                                        </td>
+                                                        <td>
+                                                            {reservation.report === 'pending' && <div className="mx-auto">
+                                                                <Spin indicator={
+                                                                    <LoadingOutlined style={{ color: '#4096FF', fontSize: 14, }} spin />} />
+                                                            </div>}
 
 
-                                                    {reservation.report === 'complete' && <TiTick className="text-green-500 text-lg" />}
+                                                            {reservation.report === 'complete' && <TiTick className="text-green-500 text-lg" />}
 
-                                                    {reservation.report === 'cencel' && <FcCancel className="text-base " />}
-                                                </td>
-                                                
-                                                <td>
-                                                    <ChangeStatus patientId={reservation?._id} status={reservation?.report} fetchData={fetchData}></ChangeStatus>
-                                                </td>
-                                                {/* <td>
+                                                            {reservation.report === 'cencel' && <FcCancel className="text-base " />}
+                                                        </td>
+
+                                                        <td>
+                                                            <ChangeStatus patientId={reservation?._id} status={reservation?.report} fetchData={fetchData}></ChangeStatus>
+                                                        </td>
+                                                        {/* <td>
                                                     <Tooltip title={`delete`}>
                                                         <Button
                                                             style={{ backgroundColor: '#515150', boxShadow: 0, color: 'white', border: 0 }}
@@ -133,17 +152,19 @@ const Reservation = () => {
                                                         </Button>
                                                     </Tooltip>
                                                 </td> */}
-                                            </tr>
-                                        })
-                                    }
+                                                    </tr>
+                                                })
+                                            }
 
 
-                                </tbody>
-                            </table>
-                        </div>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
                     </div>
             }
-        </div>
+        </div >
     );
 };
 

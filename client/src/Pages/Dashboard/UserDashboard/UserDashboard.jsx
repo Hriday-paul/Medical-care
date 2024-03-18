@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiUser, CiViewList } from "react-icons/ci";
 import { HiLogout } from "react-icons/hi";
-import { LuLayoutDashboard, LuListTodo } from "react-icons/lu";
+import { LuLayoutDashboard } from "react-icons/lu";
 import { RiMenu3Fill } from "react-icons/ri";
 import { GiTireIronCross } from "react-icons/gi";
 import { authContext } from "../../../ContextHandler/Authonicate/Authonicate";
@@ -115,23 +115,34 @@ const UserDashboard = () => {
                 </div>
 
                 {/* mobile device */}
-                <div className={`w-2/3 md:w-1/3 bg-gradient-to-br lg:hidden from-[#677AE5] to-[#8577C8] h-[calc(100vh-64px)] absolute top-[64px] md:top-[80px] z-50 left-0 ${slide ? "translate-x-0" : "-translate-x-[750px]"} duration-300`}>
-                    <div className="flex gap-x-1 justify-center items-center py-2 bg-[#989de7]">
+                <div className={`w-2/3 md:w-1/3 bg-gradient-to-br lg:hidden from-[#21201E] to-[#1a1917] h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] absolute top-[64px] md:top-[80px] z-50 left-0 ${slide ? "translate-x-0" : "-translate-x-[750px]"} duration-300`}>
+                    <div className="flex gap-x-2 items-center p-2 bg-[#444341]">
                         <img className="h-12 rounded-full" src={userInfo?.photoURL !== null ? `${userInfo.photoURL}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUDOlaA7x6auc_yDvEigMgyktyrJBM34AFOaauo6-qXD5zg_vpZlZk9offXf9PMLdA0Lw&usqp=CAU"} alt="img" />
-                        <span>
-                            <span className="block text-lg font-medium font-serif text-white">{userInfo?.displayName}</span>
-                            <span className="block text-xs text-white">{userInfo?.email}</span>
+
+                        <span className="truncate">
+                            <h3 className="text-lg font-medium font-serif text-white truncate">{userInfo.displayName}</h3>
+                            <p className="truncate text-white text-sm">{userInfo.email}</p>
                         </span>
                     </div>
-                    <div>
+
+                    <div className="px-2">
                         <h2 className="text-lg font-medium text-white font-serif p-5 pb-0">Main</h2>
-                        <NavLink onClick={() => setSlide(false)} to="/dashboard" className={location.pathname == '/dashboard' ? "w-full text-white my-3 flex flex-row justify-start items-center p-3 bg-[#989de7] hover:bg-[#989de7] duration-100" : "w-full my-3 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#989de7] duration-100"} >
+                        <NavLink to="/dashboard" onClick={() => setSlide(false)} className={location.pathname == '/dashboard' ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
                             <LuLayoutDashboard className="text-white text-2xl mr-2"></LuLayoutDashboard>
                             <h4 className="text-lg text-white font-serif font-medium">Dashboard</h4>
                         </NavLink>
-                        <NavLink onClick={() => setSlide(false)} to="/dashboard/todos" className={({ isActive }) => isActive ? "w-full text-white my-3 flex flex-row justify-start items-center p-3 bg-[#989de7] hover:bg-[#989de7] duration-100" : "w-full my-3 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#989de7] duration-100"} >
-                            <LuListTodo className="text-white text-2xl mr-2"></LuListTodo>
-                            <h4 className="text-lg text-white font-serif font-medium">Tasks</h4>
+                        <NavLink to="/dashboard/myAppoinments" onClick={() => setSlide(false)} className={({ isActive }) => isActive ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
+                            <CiViewList className="text-white text-2xl mr-2"></CiViewList>
+                            <h4 className="text-lg text-white font-serif font-medium">Appoinments</h4>
+                        </NavLink>
+                        <NavLink to="/dashboard/result" onClick={() => setSlide(false)} className={({ isActive }) => isActive ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
+                            <MdChecklist className="text-white text-2xl mr-2"></MdChecklist>
+                            <h4 className="text-lg text-white font-serif font-medium">Test Result</h4>
+                        </NavLink>
+                        
+                        <NavLink to="/dashboard/profile" onClick={() => setSlide(false)} className={({ isActive }) => isActive ? "w-full text-white my-5 flex flex-row justify-start items-center p-3 bg-[#302E2B] hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl" : "w-full my-5 flex flex-row items-center justify-start p-3 bg-transparent hover:bg-[#302E2B] duration-100 rounded-sm shadow-xl"} >
+                            <ImProfile className="text-white text-2xl mr-2"></ImProfile>
+                            <h4 className="text-lg text-white font-serif font-medium">My Profile</h4>
                         </NavLink>
                     </div>
                 </div>

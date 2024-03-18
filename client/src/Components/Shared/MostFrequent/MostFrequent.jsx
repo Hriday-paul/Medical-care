@@ -36,7 +36,6 @@ const MostFrequent = () => {
     const fetchData = useCallback(() => {
         axiosPublic.get('/mostFrequent')
             .then(({ data }) => {
-                console.log(data);
                 dispatch({ type: 'success', data })
             })
             .catch(() => {

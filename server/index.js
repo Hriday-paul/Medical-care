@@ -174,16 +174,60 @@ async function run() {
             try {
                 let result = []
                 if (req.query.type == 'all') {
-                    result = await reservationList.find().toArray();
+
+                    result = await reservationList.aggregate(
+                        [
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
                 }
                 else if (req.query.type == 'pending') {
-                    result = await reservationList.find({ report: 'pending' }).toArray();
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { report: 'pending' } },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
                 }
                 else if (req.query.type == 'complete') {
-                    result = await reservationList.find({ report: 'complete' }).toArray();
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { report: 'complete' } },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
                 }
                 else if (req.query.type == 'cencel') {
-                    result = await reservationList.find({ report: 'cencel' }).toArray();
+                    result = await reservationList.aggregate(
+                        [
+                            { $match: { report: 'cencel' } },
+                            {
+                                $lookup: {
+                                    from: 'tests',
+                                    localField: 'testId',
+                                    foreignField: '_id',
+                                    as: 'testDetails'
+                                }
+                            }
+                        ]).toArray();
                 }
                 else {
                     result = [];
@@ -319,6 +363,32 @@ async function run() {
                 res.status(400).send({ message: err.message });
             }
         })
+
+        // get usr dashboard collection
+        app.get('/userDash/:email', async (req, res) => {
+            try {
+                const reserveResult = await reservationList.countDocuments({ email: req.params.email, report: 'complete' })
+                const totalAppoinments = await reservationList.countDocuments({ email: req.params.email });
+                res.send({ reserveResult, totalAppoinments })
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+        // get admin dashboard collection
+        app.get('/adminDash', async (req, res) => {
+            try {
+                const totalUsers = await userList.countDocuments();
+                const totalAppoinments = await reservationList.countDocuments();
+                const totalTest = await testList.countDocuments();
+                res.send({ totalUsers, totalAppoinments, totalTest })
+            } catch (err) {
+                res.status(400).send({ message: err.message });
+            }
+        })
+
+
+
 
 
 

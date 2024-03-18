@@ -103,8 +103,7 @@ const AllUser = () => {
                                             </td>
                                             <td>
                                                 {user?.name}
-                                                {/* <br />
-                                                <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
+                                                
                                             </td>
                                             <td>
                                                 {user?.email}

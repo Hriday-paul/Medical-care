@@ -11,6 +11,7 @@ import Error from "../../../../Components/Shared/Ui/Error"
 import { MdOutlineDelete } from "react-icons/md"
 import { Link } from "react-router-dom"
 import toast, { Toaster } from "react-hot-toast"
+import NotFound from "../../../../Components/Shared/Ui/NotFound"
 
 const initialState = {
     appoinments: [],
@@ -59,16 +60,16 @@ const Appoinments = () => {
         fetchData(e.target.value);
     }
 
-    const deleteAppoinment = (id)=>{
+    const deleteAppoinment = (id) => {
         const loadingToastId = toast.loading('Appoinment delete pending...')
         axiosPublic.delete(`/delAppoinment/${id}`)
-        .then(()=>{
-            toast.success('Appoinment Delete Successfully', {id : loadingToastId});
-            fetchData('all')
-        })
-        .catch(()=>{
-            toast.error('Something wents wrong, try again !', {id : loadingToastId})
-        })
+            .then(() => {
+                toast.success('Appoinment Delete Successfully', { id: loadingToastId });
+                fetchData('all')
+            })
+            .catch(() => {
+                toast.error('Something wents wrong, try again !', { id: loadingToastId })
+            })
     }
 
     return (
@@ -91,87 +92,92 @@ const Appoinments = () => {
                                 <option value="cencel">Cencel</option>
                             </select>
                         </div>
-                        <div className="overflow-x-auto bg-[#262522]">
-                            <table className="table">
-                                {/* head */}
-                                <thead>
-                                    <tr className="border-[#494846]">
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>Test Name</th>
-                                        <th>Price</th>
-                                        <th>Date</th>
-                                        <th>Age</th>
-                                        <th>Blood</th>
-                                        <th>Details</th>
-                                        <th>Status</th> 
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        {
+                            fetchingState?.appoinments.length <= 0 ? <NotFound /> :
+                                <div>
+                                    <div className="overflow-x-auto bg-[#262522]">
+                                        <table className="table">
+                                            {/* head */}
+                                            <thead>
+                                                <tr className="border-[#494846]">
+                                                    <th>Name</th>
+                                                    <th>Phone</th>
+                                                    <th>Test Name</th>
+                                                    <th>Price</th>
+                                                    <th>Date</th>
+                                                    <th>Age</th>
+                                                    <th>Blood</th>
+                                                    <th>Details</th>
+                                                    <th>Status</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
 
-                                    {
-                                        fetchingState.appoinments?.map((appoinment) => {
-                                            return <tr key={appoinment?._id} className="border-[#494846]">
+                                                {
+                                                    fetchingState.appoinments?.map((appoinment) => {
+                                                        return <tr key={appoinment?._id} className="border-[#494846]">
 
-                                                <td>
-                                                    {appoinment?.name}
-                                                </td>
-                                                <td>
-                                                    {appoinment?.phone}
-                                                </td>
-                                                <td>
-                                                    {appoinment?.testDetails[0]?.name}
-                                                </td>
-                                                <td>
-                                                    {appoinment?.testDetails[0]?.price}
-                                                </td>
-                                                <td>
-                                                    
-                                                    {new Date(appoinment?.testDetails[0]?.testDate).getDate() + '-' + (new Date(appoinment?.testDetails[0]?.testDate).getMonth() + 1) + '-' + new Date(appoinment?.testDetails[0]?.testDate).getFullYear()}
-                                                </td>
-                                                <td>
-                                                    {appoinment?.age}
-                                                </td>
-                                                
-                                                <td>
-                                                    {appoinment?.blood}
-                                                </td>
-                                                <td>
-                                                    <Link className="text-sky-600" to={`/details/${appoinment?.testId}`}>See test details</Link>
-                                                </td>
-                                                <td>
-                                                    {appoinment.report === 'pending' && <div className="mx-auto">
-                                                        <Spin indicator={
-                                                            <LoadingOutlined style={{ color: '#4096FF', fontSize: 14, }} spin />} />
-                                                    </div>}
+                                                            <td>
+                                                                {appoinment?.name}
+                                                            </td>
+                                                            <td>
+                                                                {appoinment?.phone}
+                                                            </td>
+                                                            <td>
+                                                                {appoinment?.testDetails[0]?.name}
+                                                            </td>
+                                                            <td>
+                                                                {appoinment?.testDetails[0]?.price}
+                                                            </td>
+                                                            <td>
 
+                                                                {new Date(appoinment?.testDetails[0]?.testDate).getDate() + '-' + (new Date(appoinment?.testDetails[0]?.testDate).getMonth() + 1) + '-' + new Date(appoinment?.testDetails[0]?.testDate).getFullYear()}
+                                                            </td>
+                                                            <td>
+                                                                {appoinment?.age}
+                                                            </td>
 
-                                                    {appoinment.report === 'complete' && <TiTick className="text-green-500 text-lg" />}
-
-                                                    {appoinment.report === 'cencel' && <FcCancel className="text-base " />}
-                                                </td>
-                                                
-
-                                                <td>
-                                                    <Tooltip title={`delete`}>
-                                                        <Button
-                                                            style={{ backgroundColor: '#515150', boxShadow: 0, color: 'white', border: 0 }}
-                                                            type="primary"
-                                                            icon={<MdOutlineDelete />}
-                                                            onClick={()=>deleteAppoinment(appoinment._id)}
-                                                        >
-                                                        </Button>
-                                                    </Tooltip>
-                                                </td>
-                                            </tr>
-                                        })
-                                    }
+                                                            <td>
+                                                                {appoinment?.blood}
+                                                            </td>
+                                                            <td>
+                                                                <Link className="text-sky-600" to={`/details/${appoinment?.testId}`}>See test details</Link>
+                                                            </td>
+                                                            <td>
+                                                                {appoinment.report === 'pending' && <div className="mx-auto">
+                                                                    <Spin indicator={
+                                                                        <LoadingOutlined style={{ color: '#4096FF', fontSize: 14, }} spin />} />
+                                                                </div>}
 
 
-                                </tbody>
-                            </table>
-                        </div>
+                                                                {appoinment.report === 'complete' && <TiTick className="text-green-500 text-lg" />}
+
+                                                                {appoinment.report === 'cencel' && <FcCancel className="text-base " />}
+                                                            </td>
+
+
+                                                            <td>
+                                                                <Tooltip title={`delete`}>
+                                                                    <Button
+                                                                        style={{ backgroundColor: '#515150', boxShadow: 0, color: 'white', border: 0 }}
+                                                                        type="primary"
+                                                                        icon={<MdOutlineDelete />}
+                                                                        onClick={() => deleteAppoinment(appoinment._id)}
+                                                                    >
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            </td>
+                                                        </tr>
+                                                    })
+                                                }
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                        }
                     </div>
             }
             <Toaster />

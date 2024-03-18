@@ -7,6 +7,7 @@ import Error from "../../../../Components/Shared/Ui/Error";
 import { MdOutlineDelete } from "react-icons/md";
 import TestUpdateDrawer from "../../../../Components/Shared/Ui/TestUpdateDrawer";
 import Loading from "../../../../Components/Shared/Ui/Loading";
+import NotFound from "../../../../Components/Shared/Ui/NotFound";
 
 const initialState = {
     loading: true,
@@ -50,14 +51,14 @@ const AllTest = () => {
     const delateTest = (id) => {
         const loadingToastId = toast.loading('Test deletion pending...');
         axiosPublic.delete(`deleteTest/${id}`)
-        .then(({data})=>{
-            toast.success('Delete complete', {id : loadingToastId});
-            fetchData();
-            console.log(data);
-        })
-        .catch(()=>{
-            toast.error('Something wents wrong, try again !', {id : loadingToastId})
-        })
+            .then(({ data }) => {
+                toast.success('Delete complete', { id: loadingToastId });
+                fetchData();
+                console.log(data);
+            })
+            .catch(() => {
+                toast.error('Something wents wrong, try again !', { id: loadingToastId })
+            })
     }
 
     useEffect(() => {
@@ -83,86 +84,93 @@ const AllTest = () => {
                 </span>
                 <h4 className="text-xl font-medium font-serif">All Test</h4>
             </div>
-            {
-                fetchingTests.loading ? <Loading /> : fetchingTests.error ? <Error /> :
-                    <div className="overflow-x-auto bg-[#262522]">
-                        <table className="table">
-                            {/* head */}
-                            <thead>
-                                <tr className="border-[#494846]">
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Slot</th>
-                                    <th>Details</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* row 1 */}
-                                {
-                                    fetchingTests.tests?.map((test) => {
-                                        return <tr key={test?._id} className="border-[#494846]">
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="avatar">
-                                                        <div className="w-12 h-12">
-                                                            <img className="rounded-md" src={test?.photo} alt="profile image" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="font-serif">
-                                                {test?.name}
-                                            </td>
-                                            <td>
-                                                {new Date(test?.testDate).getDate() + '-' + (new Date(test?.testDate).getMonth() + 1) + '-' + new Date(test?.testDate).getFullYear()}
-                                            </td>
-                                            <td>
-                                                {test?.slot}
-                                            </td>
-                                            <td>
-                                                <p className="cursor-pointer font-serif hover:underline underline-offset-2" onClick={() => setIsModal({ isOpen: true, content: test?.details })}>Details</p>
+
+            <div>
+                {
+                    fetchingTests.loading ? <Loading /> : fetchingTests.error ? <Error /> :
+                        <div>
+                            {
+                                fetchingTests?.tests?.length < 0 ? <NotFound /> :
+                                    <div className="overflow-x-auto bg-[#262522]">
+                                        <table className="table">
+                                            {/* head */}
+                                            <thead>
+                                                <tr className="border-[#494846]">
+                                                    <th>Photo</th>
+                                                    <th>Name</th>
+                                                    <th>Date</th>
+                                                    <th>Slot</th>
+                                                    <th>Details</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {/* row 1 */}
                                                 {
-                                                    isModal.isOpen && <Modal
-                                                        title="Details"
-                                                        style={{ backgroundColor: 'black' }}
-                                                        open={isModal.isOpen}
-                                                        onOk={cencelModal}
-                                                        onCancel={cencelModal}
-                                                        okButtonProps={{ style: { display: 'none' } }}
-                                                        centered>
+                                                    fetchingTests.tests?.map((test) => {
+                                                        return <tr key={test?._id} className="border-[#494846]">
+                                                            <td>
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="avatar">
+                                                                        <div className="w-12 h-12">
+                                                                            <img className="rounded-md" src={test?.photo} alt="profile image" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="font-serif">
+                                                                {test?.name}
+                                                            </td>
+                                                            <td>
+                                                                {new Date(test?.testDate).getDate() + '-' + (new Date(test?.testDate).getMonth() + 1) + '-' + new Date(test?.testDate).getFullYear()}
+                                                            </td>
+                                                            <td>
+                                                                {test?.slot}
+                                                            </td>
+                                                            <td>
+                                                                <p className="cursor-pointer font-serif hover:underline underline-offset-2" onClick={() => setIsModal({ isOpen: true, content: test?.details })}>Details</p>
+                                                                {
+                                                                    isModal.isOpen && <Modal
+                                                                        title="Details"
+                                                                        style={{ backgroundColor: 'black' }}
+                                                                        open={isModal.isOpen}
+                                                                        onOk={cencelModal}
+                                                                        onCancel={cencelModal}
+                                                                        okButtonProps={{ style: { display: 'none' } }}
+                                                                        centered>
 
-                                                        <p className="font-sans">{isModal?.content}</p>
+                                                                        <p className="font-sans">{isModal?.content}</p>
 
-                                                    </Modal>
+                                                                    </Modal>
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                <TestUpdateDrawer test={test} fetchData={fetchData}></TestUpdateDrawer>
+                                                            </td>
+                                                            <td>
+                                                                <Tooltip title={`Delete test`}>
+                                                                    <Button
+                                                                        style={{ backgroundColor: '#515150', boxShadow: 0, color: 'white', border: 0 }}
+                                                                        type="primary"
+                                                                        icon={<MdOutlineDelete />}
+                                                                        onClick={() => delateTest(test._id)}
+                                                                    >
+                                                                    </Button>
+                                                                </Tooltip>
+                                                            </td>
+
+                                                        </tr>
+                                                    })
                                                 }
-                                            </td>
-                                            <td>
-                                                <TestUpdateDrawer test={test} fetchData={fetchData}></TestUpdateDrawer>
-                                            </td>
-                                            <td>
-                                                <Tooltip title={`Delete test`}>
-                                                    <Button
-                                                        style={{ backgroundColor: '#515150', boxShadow: 0, color: 'white', border: 0 }}
-                                                        type="primary"
-                                                        icon={<MdOutlineDelete />}
-                                                        onClick={() => delateTest(test._id)}
-                                                    >
-                                                    </Button>
-                                                </Tooltip>
-                                            </td>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            }
+                        </div>
+                }
+            </div>
 
-                                        </tr>
-                                    })
-                                }
-
-
-                            </tbody>
-                        </table>
-                    </div>
-            }
 
             <Toaster></Toaster>
         </div>

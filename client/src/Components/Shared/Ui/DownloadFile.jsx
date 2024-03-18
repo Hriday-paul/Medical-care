@@ -4,7 +4,6 @@ function DownloadFile({ url }) {
     const parts = url.split('/');
     parts.splice(6, 0, 'fl_attachment')
     const result = parts.join('/');
-    console.log(result);
     return (
         <>
             <a href={result} download>
