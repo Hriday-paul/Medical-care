@@ -5,7 +5,7 @@ const TestCard = ({ test }) => {
     return (
         <div className="flex flex-row rounded-lg w-full">
             <img className="min-h-52 lg:min-h-72 w-1/2 " src={test?.photo} alt="test image" />
-            <div className="px-5 py-8 bg-teal-500 space-y-5 flex flex-col ">
+            <div className="px-3 md:px-3 py-4 md:py-8 bg-teal-500 space-y-3 md:space-y-5 flex flex-col ">
                 <span >
                     <h3 className="text-white text-2xl lg:text-3xl font-serif font-sansline-clamp-1">{test?.name}</h3>
                 </span>

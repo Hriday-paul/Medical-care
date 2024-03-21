@@ -21,6 +21,7 @@ const BookedTest = ({ testId , fetchData}) => {
         axiosPublic.put('/addReservation', {
             testId,
             email: userInfo.email,
+            bookedDate : `${new Date().getFullYear()}-${(new Date().getMonth()+1)}-${new Date().getDate()}`,
             ...data
         })
             .then(({ data }) => {

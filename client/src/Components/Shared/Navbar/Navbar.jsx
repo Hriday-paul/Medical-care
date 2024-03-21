@@ -2,9 +2,9 @@ import { FaFacebook, FaTwitter, FaLinkedin, FaWhatsapp, FaYoutube } from "react-
 import { useEffect, useState } from "react";
 import { Link, NavLink } from 'react-router-dom'
 import logo from '../../../assets/logo.png'
-import { RiMenu3Fill } from "react-icons/ri";
 import { MdOutlinePhonePaused } from "react-icons/md";
 import { IoIosMailUnread } from "react-icons/io";
+import MobilaNavDrawer from "../Ui/MobilaNavDrawer";
 
 
 
@@ -92,7 +92,7 @@ const Navbar = () => {
                             </span>
                             <span className="relative text-sm md:text-base">My Appoinments</span>
                         </Link>
-                        <RiMenu3Fill className="text-white text-2xl md:text-3xl lg:hidden"></RiMenu3Fill>
+                        <MobilaNavDrawer/>
                     </div>
                 </div>
             </div>

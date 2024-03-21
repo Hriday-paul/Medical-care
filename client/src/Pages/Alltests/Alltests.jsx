@@ -56,7 +56,7 @@ const Alltests = () => {
                 fetchingTests.loading ? <Loading /> : fetchingTests.error ? <Error /> :
                     <div className=" bg-[#1D232A]">
                         <div className="max-w-6xl mx-auto px-5 lg:px-0 pt-5 md:pt-10 lg:pt-14 pb-10 md:pb-20 lg:pb-32">
-                            <div className="pt-20 pb-10 space-y-7 w-4/5 lg:w-2/3 mx-auto">
+                            <div className="pt-10 md:pt-16 lg:pt-20 pb-10 md:pb-14 lg:pb-16 space-y-7 w-4/5 lg:w-2/3 mx-auto">
                                 <h1 className="text-teal-500 font-medium font-serif text-2xl md:text-3xl lg:text-5xl text-center">Your beauty journey starts here, with us</h1>
                                 <p className="text-center text-gray-300 text-base md:text-lg ">At our plastic surgery clinic, we believe that beauty comes from within, and we’re here to help you unlock your true potential.</p>
                             </div>
