@@ -1,4 +1,4 @@
-# Medical care Management
+# Diagnostic center managment system
 live link : https://medico-serve.netlify.app
 
 ## Useges technology
